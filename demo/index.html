@@ -309,17 +309,47 @@
 
       // 需要你填写的 11 条文本（按顺序依次打字并提交）
       // 直接编辑下方数组的每一项文本即可；数量也可增减
+      // const simTexts = [
+      //   'Then he stops near the lens, standing still, looking at the camera.',
+      //   'Now a hail of bullets tears in toward him, leaving glowing trails and spraying sparks.',
+      //   'He raises his arm as rounds and shells streak past to smash distant buildings, triggering blasts and dust.',
+      //   'Emerald-green energy beams rake the boulevard, gouging asphalt and façades and throwing shrapnel.',
+      //   'Firing pauses; he lowers his arms, steps back to center.',
+      //   'He aims: right arm extended to camera, palm squared, repulsor vanes opening.',
+      //   'He fires tight, pulsed red repulsor blasts from his palm toward camera.',
+      //   'He lowers the arm and holds position on the ruined street.',
+      //   'The chest arc reactor unleashes a colossal blue beam straight down the boulevard.',
+      //   'A dark alien craft enters from upper-left and cruises across as he stands motionless.',
+      //   'He looks up, trying to find the alien craft.'
+      // ];
+
+      // 每次提交之间的“间隔（毫秒）”列表：
+      // 第一个值：手动提交 -> 第一次模拟 的延时；第二个值：第1次模拟 -> 第2次模拟；以此类推。
+      // 建议与 simTexts 数量一致；缺失项将使用默认值（首次 3000ms，其后 5000ms）。
+      // const simDelays = [
+      //   6000,
+      //   2100,
+      //   5000,
+      //   6500,
+      //   6700,
+      //   4500,
+      //   3000,
+      //   4000,
+      //   4500,
+      //   7000,
+      //   7000
+      // ];
+
+      // 需要你填写的 11 条文本（按顺序依次打字并提交）
+      // 直接编辑下方数组的每一项文本即可；数量也可增减
       const simTexts = [
-        'Then he stops near the lens, standing still, looking at the camera.',
-        'Now a hail of bullets tears in toward him, leaving glowing trails and spraying sparks.',
-        'He raises his arm as rounds and shells streak past to smash distant buildings, triggering blasts and dust.',
-        'Emerald-green energy beams rake the boulevard, gouging asphalt and façades and throwing shrapnel.',
-        'Firing pauses; he lowers his arms, steps back to center.',
-        'He aims: right arm extended to camera, palm squared, repulsor vanes opening.',
-        'He fires tight, pulsed red repulsor blasts from his palm toward camera.',
-        'He lowers the arm and holds position on the ruined street.',
-        'The chest arc reactor unleashes a colossal blue beam straight down the boulevard.',
-        'A dark alien craft enters from upper-left and cruises across as he stands motionless.',
+        'He stops and stands still.',
+        'A hail of bullets tears in.',
+        'He raises his arm, rounds and shells streak past.',
+        'Emerald-green beams sweep down the street.',
+        'He aims and fires tight, pulsed red repulsor blasts from his palm.',
+        'The chest arc reactor unleashes a colossal blue beam',
+        'A dark alien craft enters from the left and cruises across',
         'He looks up, trying to find the alien craft.'
       ];
 
@@ -328,19 +358,16 @@
       // 建议与 simTexts 数量一致；缺失项将使用默认值（首次 3000ms，其后 5000ms）。
       const simDelays = [
         6000,
-        2100,
-        5000,
-        6500,
-        6700,
-        4500,
         3000,
+        5500,
         4000,
-        4500,
-        7000,
-        7000
+        10500,
+        11500,
+        9500,
+        8500
       ];
 
-      function simulateTypingAndSubmit(text, perCharMs = 20) {
+      function simulateTypingAndSubmit(text, perCharMs = 40) {
         if (!text) return;
         input.focus();
         input.value = '';

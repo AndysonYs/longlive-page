@@ -47,12 +47,14 @@ function closeModal() {
 // Update modal content
 function updateModalContent() {
     var img = images[currentIndex];
-    modalImg.style.backgroundImage = `url(${img.src})`;
-    modalImg.style.transform = `scale(${scale})`;
-    modalImg.style.width = '100%'; // Fit modal width
-    modalImg.style.height = '100%'; // Maintain aspect ratio
-    captionText.innerHTML = img.alt;
-    watermark.style.display = "block"; // Show watermark
+    if (modalImg && img) {
+        modalImg.style.backgroundImage = `url(${img.src})`;
+        modalImg.style.transform = `scale(${scale})`;
+        modalImg.style.width = '100%'; // Fit modal width
+        modalImg.style.height = '100%'; // Maintain aspect ratio
+    }
+    if (captionText && img) captionText.innerHTML = img.alt || '';
+    if (watermark) watermark.style.display = "block"; // Show watermark
     updateThumbnails();
 }
 
@@ -71,9 +73,11 @@ function updateThumbnails() {
 
 // Get close button and add click event
 var span = document.getElementsByClassName("close")[0];
-span.onclick = function () {
-    closeModal();
-    watermark.style.display = "none"; // Hide watermark when closing modal
+if (span) {
+    span.onclick = function () {
+        closeModal();
+        if (watermark) watermark.style.display = "none"; // Hide watermark when closing modal
+    }
 }
 
 // Controls for switching images
@@ -90,48 +94,54 @@ function plusSlides(n) {
 var prev = document.querySelector('.prev');
 var next = document.querySelector('.next');
 
-prev.onclick = function () {
-    plusSlides(-1);
+if (prev) {
+    prev.onclick = function () {
+        plusSlides(-1);
+    }
 }
 
-next.onclick = function () {
-    plusSlides(1);
+if (next) {
+    next.onclick = function () {
+        plusSlides(1);
+    }
 }
 
 // Add keyboard navigation
 document.addEventListener('keydown', function(event) {
-    if (modal.style.display === 'block') {
+    if (modal && modal.style.display === 'block') {
         if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
             plusSlides(-1);
         } else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
             plusSlides(1);
         } else if (event.key === 'Escape') {
             closeModal();
-            watermark.style.display = "none"; // Hide watermark when closing modal
+            if (watermark) watermark.style.display = "none"; // Hide watermark when closing modal
         }
     }
 });
 
 
 
-modalImg.addEventListener('mouseleave', function() {
-    isDragging = false;
-});
+if (modalImg) {
+    modalImg.addEventListener('mouseleave', function() {
+        isDragging = false;
+    });
 
-modalImg.addEventListener('mouseup', function() {
-    isDragging = false;
-});
+    modalImg.addEventListener('mouseup', function() {
+        isDragging = false;
+    });
 
-modalImg.addEventListener('mousemove', function(e) {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - modalImg.offsetLeft;
-    const y = e.pageY - modalImg.offsetTop;
-    const walkX = (x - startX) * 2; // Adjust image move speed
-    const walkY = (y - startY) * 2; // Adjust image move speed
-    modalImg.scrollLeft = scrollLeft - walkX;
-    modalImg.scrollTop = scrollTop - walkY;
-});
+    modalImg.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - modalImg.offsetLeft;
+        const y = e.pageY - modalImg.offsetTop;
+        const walkX = (x - startX) * 2; // Adjust image move speed
+        const walkY = (y - startY) * 2; // Adjust image move speed
+        modalImg.scrollLeft = scrollLeft - walkX;
+        modalImg.scrollTop = scrollTop - walkY;
+    });
+}
 
 
 
@@ -205,3 +215,235 @@ function dismissWarning() {
 if (isMobileDevice() || isWeChat()) {
     document.getElementById('mobile-warning').style.display = 'block';
 }
+
+// Playback speed controls per section
+document.querySelectorAll('.speed-controls').forEach(group => {
+    group.addEventListener('click', (e) => {
+        const btn = e.target.closest('.speed-btn');
+        if (!btn) return;
+        const speed = parseFloat(btn.dataset.speed || '1');
+        // highlight active
+        group.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        // scope to this section
+        const section = group.closest('.gallery-section');
+        if (!section) return;
+        section.querySelectorAll('video').forEach(v => {
+            try { v.playbackRate = speed; } catch (err) {}
+        });
+    });
+});
+
+// Build interactive grid (6 rows x 4 columns) from assets/interactive and prompts map
+(function buildInteractiveGrid() {
+    const section = document.querySelector('#interactive');
+    if (!section) return;
+    const grid = section.querySelector('.interactive-grid');
+    if (!grid) return;
+
+    // If prompts map is not loaded yet, try to load it lazily
+    if (typeof window.INTERACTIVE_PROMPTS === 'undefined') {
+        try {
+            // Load prompts file synchronously by injecting a script tag
+            const s = document.createElement('script');
+            s.src = './interactive_prompts.js';
+            s.defer = false;
+            s.onload = () => buildInteractiveGrid();
+            document.head.appendChild(s);
+            return;
+        } catch (e) {}
+    }
+
+    // Video file list is provided by prompts file; fallback to predefined list if absent
+    const files = (window.INTERACTIVE_FILES && Array.isArray(window.INTERACTIVE_FILES)) ? window.INTERACTIVE_FILES : [];
+    if (!files.length) return;
+
+    const total = files.length;
+    const maxCells = 6 * 4; // 24 cells
+    const slice = files.slice(0, maxCells);
+
+    // Clear any existing children (if re-built)
+    grid.innerHTML = '';
+
+    slice.forEach((file) => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.style.setProperty('--aspect-ratio', '16 / 9');
+
+        const video = document.createElement('video');
+        video.className = 'gallery-video';
+        video.setAttribute('loop', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('autoplay', '');
+        video.setAttribute('playsinline', '');
+
+        const source = document.createElement('source');
+        // Encode URI to handle spaces and non-ASCII filenames
+        source.src = encodeURI(`./assets/interactive/${file}`);
+        source.type = 'video/mp4';
+        video.appendChild(source);
+        // Ensure autoplay works reliably on various browsers
+        video.muted = true;
+        video.defaultMuted = true;
+
+        const promptDiv = document.createElement('div');
+        promptDiv.className = 'prompt-overlay';
+        const prompt = (window.INTERACTIVE_PROMPTS && window.INTERACTIVE_PROMPTS[file]) ? window.INTERACTIVE_PROMPTS[file] : '';
+        promptDiv.textContent = prompt;
+
+        // overlays: duration badge + progress bar
+        const badge = document.createElement('div');
+        badge.className = 'duration-badge';
+        badge.textContent = '';
+
+        const bar = document.createElement('div');
+        bar.className = 'progress-bar';
+        const fill = document.createElement('div');
+        fill.className = 'progress-fill';
+        bar.appendChild(fill);
+
+        item.appendChild(video);
+        item.appendChild(promptDiv);
+        item.appendChild(badge);
+        item.appendChild(bar);
+        item.dataset.progressAdded = '1';
+
+        const updateDuration = () => {
+            if (isFinite(video.duration) && video.duration > 0) {
+                badge.textContent = `${Math.round(video.duration)}s`;
+            }
+        };
+
+        const updateProgress = () => {
+            const d = isFinite(video.duration) ? video.duration : 0;
+            const t = isFinite(video.currentTime) ? video.currentTime : 0;
+            const pct = d > 0 ? (t / d) * 100 : 0;
+            fill.style.width = `${pct}%`;
+        };
+
+        video.addEventListener('loadedmetadata', () => { updateDuration(); updateProgress(); });
+        video.addEventListener('timeupdate', updateProgress);
+        video.addEventListener('seeked', updateProgress);
+        video.addEventListener('playing', updateProgress);
+        video.addEventListener('ratechange', updateProgress);
+
+        // Attempt to autoplay once appended to DOM
+        const tryPlay = () => {
+            const p = video.play();
+            if (p && typeof p.catch === 'function') {
+                p.catch(() => {});
+            }
+        };
+        video.addEventListener('canplay', tryPlay, { once: true });
+        // Fallback attempt
+        setTimeout(tryPlay, 0);
+
+        if (isFinite(video.duration) && video.duration > 0) {
+            updateDuration();
+            updateProgress();
+        }
+
+        grid.appendChild(item);
+    });
+})();
+
+// Add duration badge and progress bar to shortwindow videos
+(function attachShortwindowOverlays() {
+    const shortSection = document.querySelector('#shortwindow');
+    if (!shortSection) return;
+    const items = shortSection.querySelectorAll('.gallery-item');
+    items.forEach(item => {
+        if (item.dataset.progressAdded === '1') return;
+        const video = item.querySelector('video');
+        if (!video) return;
+
+        const badge = document.createElement('div');
+        badge.className = 'duration-badge';
+        badge.textContent = '';
+
+        const bar = document.createElement('div');
+        bar.className = 'progress-bar';
+        const fill = document.createElement('div');
+        fill.className = 'progress-fill';
+        bar.appendChild(fill);
+
+        item.appendChild(badge);
+        item.appendChild(bar);
+        item.dataset.progressAdded = '1';
+
+        const updateDuration = () => {
+            if (isFinite(video.duration) && video.duration > 0) {
+                badge.textContent = `${Math.round(video.duration)}s`;
+            }
+        };
+
+        const updateProgress = () => {
+            const d = isFinite(video.duration) ? video.duration : 0;
+            const t = isFinite(video.currentTime) ? video.currentTime : 0;
+            const pct = d > 0 ? (t / d) * 100 : 0;
+            fill.style.width = `${pct}%`;
+        };
+
+        video.addEventListener('loadedmetadata', () => { updateDuration(); updateProgress(); });
+        video.addEventListener('timeupdate', updateProgress);
+        video.addEventListener('seeked', updateProgress);
+        video.addEventListener('playing', updateProgress);
+        video.addEventListener('ratechange', updateProgress);
+
+        // Initialize if metadata already available
+        if (isFinite(video.duration) && video.duration > 0) {
+            updateDuration();
+            updateProgress();
+        }
+    });
+})();
+
+// Apply overlays to all other sections as well
+(function attachGlobalOverlays() {
+    const items = document.querySelectorAll('.gallery-section .gallery-item');
+    items.forEach(item => {
+        // Skip Demo Video section (#teaser)
+        if (item.closest('#teaser')) return;
+        if (item.dataset.progressAdded === '1') return; // already handled
+        const video = item.querySelector('video');
+        if (!video) return;
+
+        const badge = document.createElement('div');
+        badge.className = 'duration-badge';
+        badge.textContent = '';
+
+        const bar = document.createElement('div');
+        bar.className = 'progress-bar';
+        const fill = document.createElement('div');
+        fill.className = 'progress-fill';
+        bar.appendChild(fill);
+
+        item.appendChild(badge);
+        item.appendChild(bar);
+        item.dataset.progressAdded = '1';
+
+        const updateDuration = () => {
+            if (isFinite(video.duration) && video.duration > 0) {
+                badge.textContent = `${Math.round(video.duration)}s`;
+            }
+        };
+
+        const updateProgress = () => {
+            const d = isFinite(video.duration) ? video.duration : 0;
+            const t = isFinite(video.currentTime) ? video.currentTime : 0;
+            const pct = d > 0 ? (t / d) * 100 : 0;
+            fill.style.width = `${pct}%`;
+        };
+
+        video.addEventListener('loadedmetadata', () => { updateDuration(); updateProgress(); });
+        video.addEventListener('timeupdate', updateProgress);
+        video.addEventListener('seeked', updateProgress);
+        video.addEventListener('playing', updateProgress);
+        video.addEventListener('ratechange', updateProgress);
+
+        if (isFinite(video.duration) && video.duration > 0) {
+            updateDuration();
+            updateProgress();
+        }
+    });
+})();

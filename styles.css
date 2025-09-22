@@ -134,6 +134,12 @@ body {
     color: #b94a48; /* You can change this to your preferred color */
 }
 
+.prompt-highlight-yellow {
+    font-weight: 700;
+    color: #FFD700;
+    white-space: nowrap;
+}
+
 .prompt-overlay {
 position: absolute;
 top: 0;
@@ -165,15 +171,19 @@ width: 100%;
 height: 100%;
 background: rgba(0, 0, 0, 0.7);
 color: white;
-padding: 0px;
+padding: 12px 16px;
 margin: auto;
 opacity: 0;
 transition: opacity 0.3s ease;
 display: flex;
-align-items: center;
-justify-content: center;
-text-align: center;
-font-size: 12pt;
+align-items: flex-start;
+justify-content: flex-start;
+text-align: left;
+font-size: 9pt;
+line-height: 1.4;
+overflow-y: auto;
+white-space: pre-line;
+overflow-wrap: anywhere;
 }
 .gallery-item:hover .prompt-overlay-large {
     opacity: 1;
@@ -236,6 +246,30 @@ font-size: 12pt;
 .gallery-section {
     margin-bottom: 40px; /* Increase bottom spacing */
     margin-top: 40px; /* Increase top spacing */
+}
+
+.speed-controls {
+    display: inline-flex;
+    gap: 8px;
+    margin: 6px 0 12px 0;
+}
+.speed-label {
+    color: #1c170e;
+    font-weight: 600;
+    margin-right: 6px;
+}
+.speed-btn {
+    padding: 6px 10px;
+    border: 1px solid #a55f2d;
+    background: #fff;
+    color: #a55f2d;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.speed-btn.active,
+.speed-btn:hover {
+    background: #a55f2d;
+    color: #fff;
 }
 
 .gallery-section h2 {
@@ -326,6 +360,14 @@ pre {
 .gallery-3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    font-family: 'Noto Serif JP', serif;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+.gallery-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     font-family: 'Noto Serif JP', serif;
     max-width: 1440px;
@@ -489,6 +531,83 @@ pre {
     align-self: end;
 }
 
+/* Shortwindow row prompt spanning 3 columns */
+.shortwindow-grid .row-prompt {
+    grid-column: 1 / -1;
+    text-align: left;
+    color: #1c170e;
+    font-size: 1.1em;
+    line-height: 1.35;
+    white-space: pre-line;
+    padding: 4px 0 2px 0;
+}
+
+/* Shortwindow video overlays: duration and progress */
+.shortwindow-grid .duration-badge {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 2px 6px;
+    font-size: 0.95em;
+    border-radius: 3px;
+    font-family: 'Noto Serif JP', serif;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.shortwindow-grid .progress-bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(230, 230, 230, 0.55);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.shortwindow-grid .progress-fill {
+    width: 0%;
+    height: 100%;
+    background: #FF0000;
+    transition: width 0.1s linear;
+}
+
+/* Global video overlays (apply to other sections) */
+.duration-badge {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 2px 6px;
+    font-size: 0.95em;
+    border-radius: 3px;
+    font-family: 'Noto Serif JP', serif;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.progress-bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(230, 230, 230, 0.55);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: #FF0000;
+    transition: width 0.1s linear;
+}
+
 /* Compare grid specific */
 .compare-grid {
     grid-auto-rows: auto;
@@ -503,6 +622,38 @@ pre {
     padding: 6px 0 2px 0;
     font-size: 1.5em;
     align-self: end;
+}
+
+/* KV recaching grid specific */
+.kv-grid {
+    grid-auto-rows: auto;
+    row-gap: 6px;
+}
+.kv-grid .col-header {
+    grid-column: span 1;
+    text-align: center;
+    font-weight: bold;
+    color: #1c170e;
+    background: transparent;
+    padding: 6px 0 2px 0;
+    font-size: 1.5em;
+    align-self: end;
+}
+
+/* KV recache row prompt spanning 3 columns */
+.kv-grid .row-prompt {
+    grid-column: 1 / -1;
+    text-align: left;
+    color: #1c170e;
+    font-size: 1.1em;
+    line-height: 1.35;
+    white-space: pre-line;
+    padding: 4px 0 2px 0;
+}
+
+.prompt-highlight-red {
+    font-weight: 700;
+    color: #e53935;
 }
 
 .gallery-item:hover .gallery-image-sr {
