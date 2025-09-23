@@ -24,7 +24,7 @@
 
       body {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+        font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
         color: var(--text);
         background: var(--bg-page);
         background-image:
@@ -100,6 +100,13 @@
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
       }
 
+      .video-timer {
+        margin-top: 8px;
+        font-size: 18px;
+        color: var(--muted);
+        text-align: center;
+      }
+
       /* --- Submitted Prompts list --- */
       .log-list {
         width: 100%;
@@ -153,13 +160,13 @@
 
       button[type="submit"] {
         height: 48px; padding: 0 18px; font-size: 16px; border: none; border-radius: 10px;
-        background: linear-gradient(180deg, #3b82f6, #1d4ed8); color: var(--primary-contrast);
-        cursor: pointer; box-shadow: 0 6px 16px rgba(29, 78, 216, 0.25);
+        background: #85B737; color: var(--primary-contrast);
+        cursor: pointer; box-shadow: 0 6px 16px rgba(133, 183, 55, 0.25);
         transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
       }
-      button[type="submit"]:hover { filter: brightness(1.03); box-shadow: 0 10px 22px rgba(29,78,216,0.35); }
-      button[type="submit"]:active { transform: translateY(1px); filter: brightness(0.98); box-shadow: 0 6px 16px rgba(29,78,216,0.25); }
-      button[type="submit"]:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(37,99,235,0.3), 0 6px 16px rgba(29,78,216,0.25); }
+      button[type="submit"]:hover { filter: brightness(1.03); box-shadow: 0 10px 22px rgba(133,183,55,0.35); }
+      button[type="submit"]:active { transform: translateY(1px); filter: brightness(0.98); box-shadow: 0 6px 16px rgba(133,183,55,0.25); }
+      button[type="submit"]:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(133,183,55,0.3), 0 6px 16px rgba(133,183,55,0.25); }
 
       /* --- Responsive --- */
       @media (max-width: 900px) {
@@ -194,6 +201,7 @@
                 <div class="spinner"></div>
               </div>
             </div>
+            <div id="videoTimer" class="video-timer" aria-live="polite">0.0s</div>
           </div>
 
           <!-- 下方：Input 表单（占满第二行） -->
@@ -214,11 +222,19 @@
       const logList = document.getElementById('textLogList');
       const videoLeft = document.getElementById('videoLeft');
       const overlayLeft = document.getElementById('overlayLeft');
+      const timerEl = document.getElementById('videoTimer');
+
+      function updateTimer() {
+        if (!timerEl) return;
+        const t = Number(videoLeft?.currentTime || 0);
+        timerEl.textContent = (Number.isFinite(t) ? t : 0).toFixed(1) + 's';
+      }
 
       function setVideoBlack(video) {
         try { video.removeAttribute('src'); video.load(); } catch (_) {}
       }
       setVideoBlack(videoLeft);
+      updateTimer();
 
       let logItemCount = 0;
 
@@ -307,6 +323,7 @@
           try { await videoLeft.play(); } catch (_) {}
           videoLeft.pause();
           try { videoLeft.currentTime = 0; } catch (_) {}
+          updateTimer();
         }
         overlayLeft.classList.add('hidden');
         await delay(1000);
@@ -338,6 +355,12 @@
           }
         }
       });
+
+      // 计时器事件绑定：以 0.1s 精度显示当前时间
+      ['timeupdate','seeked','seeking','play','pause','loadedmetadata','loadeddata','ratechange','stalled','waiting']
+        .forEach(evt => videoLeft.addEventListener(evt, updateTimer));
+      // 当播放结束时也更新一次，确保显示最终时间
+      videoLeft.addEventListener('ended', updateTimer);
     </script>
   </body>
 </html>
