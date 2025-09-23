@@ -4,7 +4,7 @@
 
 /* Set global styles */
 body {
-    font-family:  'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
@@ -12,7 +12,7 @@ body {
     display: flex;
     font-size: 16px;
     line-height: 1.6;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* Sidebar styles */
@@ -63,15 +63,15 @@ body {
     font-size: 1.8em;
     font-weight: 700;
     margin-bottom: 20px;
-    color: #640f25;
+    color: #85B737;
     text-align: center;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* Sidebar logo image next to title */
 .sidebar-logo {
     height: 1em;
-    width: 1em;
+    width: 1.2em;
     vertical-align: -0.15em;
     margin-right: 6px;
 }
@@ -98,7 +98,7 @@ body {
     padding: 10px 15px;
     border-radius: 8px;
     transition: color 0.3s, background-color 0.3s;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 .sidebar ul li a i {
@@ -108,7 +108,7 @@ body {
 .sidebar ul li a:hover,
 .sidebar ul li a.active {
     color: #fff;
-    background-color: #a55f2d;
+    background-color: #85B737;
 }
 
 .paper-info,
@@ -121,7 +121,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     font-size: 0.8em;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 .video-cell {
@@ -200,13 +200,14 @@ overflow-wrap: anywhere;
 
 .paper-info h1{
     font-size: 2.5em;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
+    color: #000;
 }
 
 /* Title logo image before main H1 */
 .title-logo {
-    height: 2em;
-    width: 2em;
+    height: 2.2em;
+    width: 2.4em;
     vertical-align: -0.55em;
     margin-right: 10px;
 }
@@ -215,18 +216,20 @@ overflow-wrap: anywhere;
     font-size: 1.8em;
     font-weight: 500;
     margin-bottom: 10px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 .authors {
     margin-bottom: 10px;
     font-size: 1.2em;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 .authors .author a, .authors .author {
-    color: #007acc;
+    color: #85B737;
     text-decoration: none;
     font-weight: normal;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 .authors .author a:hover {
@@ -245,7 +248,7 @@ overflow-wrap: anywhere;
 }
 
 .paper-info a {
-    color: #007acc;
+    color: #85B737;
     text-decoration: none;
     font-weight: 400;
     font-size: 1.2em;
@@ -257,7 +260,7 @@ overflow-wrap: anywhere;
 .affiliations {
     font-size: 1em;
     color: #555;
-    
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 .gallery-section {
@@ -274,18 +277,20 @@ overflow-wrap: anywhere;
     color: #1c170e;
     font-weight: 600;
     margin-right: 6px;
+    font-size: 1.3em;
 }
 .speed-btn {
     padding: 6px 10px;
-    border: 1px solid #a55f2d;
+    border: 1px solid #85B737;
     background: #fff;
-    color: #a55f2d;
+    color: #85B737;
     border-radius: 6px;
     cursor: pointer;
+    font-size: 1.3em;
 }
 .speed-btn.active,
 .speed-btn:hover {
-    background: #a55f2d;
+    background: #85B737;
     color: #fff;
 }
 
@@ -293,8 +298,8 @@ overflow-wrap: anywhere;
     font-size: 2em; /* Adjust title font size */
     font-weight: 800;
     margin-bottom: 20px;
-    font-family: 'Noto Serif JP', serif;
-    color: #640f25;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
+    color: #85B737;
     text-align: center; /* Center text */
 }
 
@@ -302,7 +307,7 @@ overflow-wrap: anywhere;
     font-size: 1.2em;
     font-weight: 800;
     margin-bottom: 20px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     color: #161616;
     text-align: left;
     font-weight: normal;
@@ -329,7 +334,7 @@ pre {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 1.5%;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -337,7 +342,7 @@ pre {
     display: grid;
     grid-template-columns: repeat(26, 1fr);
     gap: 3px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -345,7 +350,7 @@ pre {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -354,7 +359,7 @@ pre {
     display: grid;
     grid-template-columns: repeat(32, 1fr);
     gap: 10px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -362,7 +367,7 @@ pre {
     display: grid;
     grid-template-columns: repeat(48, 1fr);
     gap: 10px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -370,7 +375,7 @@ pre {
     display: grid;
     grid-template-columns: repeat(60, 1fr);
     gap: 10px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -378,7 +383,7 @@ pre {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -386,7 +391,7 @@ pre {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -394,7 +399,7 @@ pre {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     gap: 1.5%;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -403,7 +408,7 @@ pre {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     gap: 1.5%;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     max-width: 1440px;
     margin: 0 auto;
 }
@@ -569,7 +574,7 @@ pre {
     padding: 2px 6px;
     font-size: 0.95em;
     border-radius: 3px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     z-index: 2;
     pointer-events: none;
 }
@@ -588,7 +593,7 @@ pre {
 .shortwindow-grid .progress-fill {
     width: 0%;
     height: 100%;
-    background: #FF0000;
+    background: #85B737;
     transition: width 0.1s linear;
 }
 
@@ -602,7 +607,7 @@ pre {
     padding: 2px 6px;
     font-size: 0.95em;
     border-radius: 3px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     z-index: 2;
     pointer-events: none;
 }
@@ -621,7 +626,7 @@ pre {
 .progress-fill {
     width: 0%;
     height: 100%;
-    background: #FF0000;
+    background: #85B737;
     transition: width 0.1s linear;
 }
 
@@ -707,7 +712,7 @@ pre {
     padding: 2px 5px;
     font-size: 1.1em;
     border-radius: 3px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* Different background colors for different classes */
@@ -743,7 +748,7 @@ pre {
     padding: 5px 10px;
     font-size: 1.2em;
     border-radius: 3px;
-    font-family: 'Noto Serif JP', serif;
+    font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
     font-weight: bold;
     pointer-events: none;
 }
