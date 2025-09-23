@@ -234,7 +234,7 @@ document.querySelectorAll('.speed-controls').forEach(group => {
     });
 });
 
-// Build interactive grid (6 rows x 4 columns) from assets/interactive and prompts map
+// Build interactive grid (8 columns x 3 rows) from assets/interactive and prompts map
 (function buildInteractiveGrid() {
     const section = document.querySelector('#interactive');
     if (!section) return;
@@ -259,7 +259,7 @@ document.querySelectorAll('.speed-controls').forEach(group => {
     if (!files.length) return;
 
     const total = files.length;
-    const maxCells = 6 * 4; // 24 cells
+    const maxCells = 8 * 3; // 24 cells
     const slice = files.slice(0, maxCells);
 
     // Clear any existing children (if re-built)
@@ -446,4 +446,104 @@ document.querySelectorAll('.speed-controls').forEach(group => {
             updateProgress();
         }
     });
+})();
+
+// Add duration badge and progress bar to Demo section (#teaser)
+(function attachTeaserOverlay() {
+    const teaser = document.querySelector('#teaser');
+    if (!teaser) return;
+    const item = teaser.querySelector('.demo-hero');
+    if (!item) return;
+    if (item.dataset.progressAdded === '1') return;
+    const video = item.querySelector('video');
+    if (!video) return;
+
+    const bar = document.createElement('div');
+    bar.className = 'progress-bar';
+    const fill = document.createElement('div');
+    fill.className = 'progress-fill';
+    bar.appendChild(fill);
+
+    item.appendChild(bar);
+    item.dataset.progressAdded = '1';
+
+    const updateProgress = () => {
+        const d = isFinite(video.duration) ? video.duration : 0;
+        const t = isFinite(video.currentTime) ? video.currentTime : 0;
+        const pct = d > 0 ? (t / d) * 100 : 0;
+        fill.style.width = `${pct}%`;
+    };
+
+    video.addEventListener('loadedmetadata', () => { updateProgress(); });
+    video.addEventListener('timeupdate', updateProgress);
+    video.addEventListener('seeked', updateProgress);
+    video.addEventListener('playing', updateProgress);
+    video.addEventListener('ratechange', updateProgress);
+
+    if (isFinite(video.duration) && video.duration > 0) {
+        updateProgress();
+    }
+})();
+
+// Orchestrate video loading in document display order (prioritize top sections)
+(function orchestrateOrderedVideoLoading() {
+    try {
+        // Ensure interactive grid is already built before collecting videos
+        const allVideos = Array.from(document.querySelectorAll('.content .gallery-section video.gallery-video'));
+        if (!allVideos.length) return;
+
+        // Move src -> data-src and stop any in-flight fetches to regain control
+        const managed = [];
+        allVideos.forEach(v => {
+            if (!v || v.dataset.managed === '1') return;
+            const source = v.querySelector('source');
+            if (!source) return;
+            const src = source.getAttribute('src');
+            if (!src) return;
+            try { v.pause(); } catch (e) {}
+            source.setAttribute('data-src', src);
+            source.removeAttribute('src');
+            v.removeAttribute('autoplay');
+            v.preload = 'none';
+            // Calling load() after removing src cancels current network activity
+            try { v.load(); } catch (e) {}
+            v.dataset.managed = '1';
+            managed.push(v);
+        });
+
+        if (!managed.length) return;
+
+        // Limit concurrent loads to avoid bandwidth contention
+        const maxConcurrent = 4;
+        let inFlight = 0;
+        let cursor = 0;
+
+        const startNext = () => {
+            // Fill up to concurrency window
+            while (inFlight < maxConcurrent && cursor < managed.length) {
+                const v = managed[cursor++];
+                const source = v.querySelector('source');
+                if (!source) continue;
+                const ds = source.getAttribute('data-src');
+                if (!ds) continue;
+                source.setAttribute('src', ds);
+                try { v.load(); } catch (e) {}
+                inFlight++;
+
+                const onDone = () => {
+                    inFlight--;
+                    // Try to autoplay once ready
+                    try { v.muted = true; v.defaultMuted = true; v.play().catch(() => {}); } catch (e) {}
+                    startNext();
+                };
+
+                v.addEventListener('loadeddata', onDone, { once: true });
+                v.addEventListener('error', onDone, { once: true });
+            }
+        };
+
+        startNext();
+    } catch (e) {
+        // Fail silently; do not block page if anything goes wrong
+    }
 })();

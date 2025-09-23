@@ -18,7 +18,9 @@
         --primary-contrast: #ffffff;
       }
 
+      /* --- Base --- */
       html, body { height: 100%; }
+      *, *::before, *::after { box-sizing: border-box; }
 
       body {
         margin: 0;
@@ -38,62 +40,51 @@
         gap: calc(var(--gap) * 1.25);
       }
 
-      .section-title {
-        margin: 0 0 10px;
-        font-size: 20px;
-        color: var(--muted);
-        font-weight: 700;
-        letter-spacing: 0.2px;
-        position: relative;
-        padding-left: 10px;
-      }
-      .section-title::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 4px;
-        height: 1.2em;
-        border-radius: 3px;
-        background: linear-gradient(180deg, #60a5fa, #2563eb);
-      }
-
-      .video-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 0;
-      }
-
-      .video-box {
+      /* --- Panels --- */
+      .panel {
         background: var(--bg-panel);
         border: var(--border);
         border-radius: var(--radius);
-        padding: 16px;
+        padding: 22px;
         box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-        overflow: hidden;
-        width: 100%;
       }
 
+      .label {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--muted);
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      /* --- Top row grid (Submitted Prompts | Video) + bottom row form in same grid --- */
+      .text-grid {
+        display: grid;
+        grid-template-columns: 3fr 7fr; /* 左: Submitted | 右: Video */
+        grid-template-rows: auto auto;   /* 顶部一行，底部表单一行 */
+        gap: var(--gap);
+        align-items: stretch;
+      }
+
+      /* Place items in grid */
+      .panel-submitted { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; }
+      .grid-video      { grid-column: 2; grid-row: 1; }
+      .panel-form      { grid-column: 1 / -1; grid-row: 2; }
+
+      /* Make left panel fill height */
+      .panel-submitted .log-list { flex: 1 1 auto; min-height: 0; }
+
+      /* --- Video box --- */
+      .video-box { overflow: hidden; width: 100%; }
       .video-title {
-        font-size: 22px;
-        font-weight: 700;
-        color: #0f172a;
-        margin: 0 0 12px 0;
-        letter-spacing: 0.2px;
-        text-align: center;
+        font-size: 22px; font-weight: 700; color: #0f172a; margin: 0 0 12px; letter-spacing: 0.2px; text-align: center;
       }
 
       .video-wrap { position: relative; }
 
       .video-overlay {
-        position: absolute;
-        inset: 0;
-        display: grid;
-        place-items: center;
-        background: rgba(15, 23, 42, 0.35);
-        backdrop-filter: blur(1px);
-        transition: opacity 180ms ease;
+        position: absolute; inset: 0; display: grid; place-items: center; background: rgba(15, 23, 42, 0.35);
+        backdrop-filter: blur(1px); transition: opacity 180ms ease;
       }
       .video-overlay.hidden { opacity: 0; pointer-events: none; }
       .spinner { width: 44px; height: 44px; border: 4px solid rgba(255,255,255,0.35); border-top-color: #fff; border-radius: 50%; animation: spin 0.9s linear infinite; }
@@ -101,7 +92,7 @@
 
       .video-box video {
         width: 100%;
-        aspect-ratio: 21 / 9; /* 更沉浸的超宽比例，可按需调整 */
+        aspect-ratio: 21 / 9;
         background: #000;
         border-radius: 12px;
         display: block;
@@ -109,82 +100,7 @@
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
       }
 
-      .text-grid {
-        display: grid;
-        grid-template-columns: 4fr 6fr; /* 左: Submitted Prompts(4) | 右: Video(6) */
-        gap: var(--gap);
-        align-items: stretch; /* 保证左右两列同高 */
-      }
-
-      /* Grid placement for top/bottom layout */
-      .panel-submitted { grid-column: 1; grid-row: 1; }
-      .grid-video { grid-column: 2; grid-row: 1; }
-      .panel-form { grid-column: 1 / -1; grid-row: 2; }
-
-      /* 让左侧面板内部自适应填满高度 */
-      .panel-submitted { display: flex; flex-direction: column; }
-      .panel-submitted .log-list { flex: 1 1 auto; min-height: 0; }
-
-      .panel {
-        background: var(--bg-panel);
-        border: var(--border);
-        border-radius: var(--radius);
-        padding: 18px;
-        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-      }
-
-      form#textForm { display: flex; gap: 12px; align-items: flex-start; }
-
-      #textInput {
-        flex: 1 1 auto;
-        min-height: 64px; /* 两行左右 */
-        padding: 10px 14px;
-        font-size: 16px;
-        border-radius: 10px;
-        border: var(--border);
-        outline: none;
-        background: #fff;
-        transition: box-shadow 120ms ease, border-color 120ms ease;
-        resize: vertical;
-      }
-      #textInput::placeholder { color: #94a3b8; }
-      #textInput:focus { border-color: #60a5fa; box-shadow: 0 0 0 4px rgba(37,99,235,0.15); }
-
-      button[type="submit"] {
-        flex: 0 0 auto;
-        height: 48px;
-        padding: 0 18px;
-        font-size: 16px;
-        border: none;
-        border-radius: 10px;
-        background: linear-gradient(180deg, #3b82f6, #1d4ed8);
-        color: var(--primary-contrast);
-        cursor: pointer;
-        box-shadow: 0 6px 16px rgba(29, 78, 216, 0.25);
-        transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
-      }
-      button[type="submit"]:hover { filter: brightness(1.03); box-shadow: 0 10px 22px rgba(29,78,216,0.35); }
-      button[type="submit"]:active { transform: translateY(1px); filter: brightness(0.98); box-shadow: 0 6px 16px rgba(29,78,216,0.25); }
-      button[type="submit"]:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(37,99,235,0.3), 0 6px 16px rgba(29,78,216,0.25); }
-
-      #textLogLabel { display: block; margin-bottom: 10px; color: var(--muted); font-size: 15px; font-weight: 600; }
-      #textLog {
-        width: 100%;
-        min-height: 260px;
-        resize: vertical;
-        box-sizing: border-box;
-        padding: 14px;
-        border-radius: 10px;
-        border: var(--border);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-        font-size: 14px;
-        line-height: 1.5;
-        background: #fff;
-        transition: box-shadow 120ms ease, border-color 120ms ease;
-      }
-      #textLog:focus-visible { border-color: #60a5fa; box-shadow: 0 0 0 4px rgba(37,99,235,0.15); outline: none; }
-
-      /* Submitted Prompts as colored boxes */
+      /* --- Submitted Prompts list --- */
       .log-list {
         width: 100%;
         min-height: 260px;
@@ -206,10 +122,53 @@
         color: var(--text);
         font-size: 13px;
       }
-      .log-item + .log-item { margin-top: 0; }
 
+      /* --- Form (bottom row) --- */
+      form#textForm {
+        display: grid;
+        grid-template-columns: 3fr 7fr; /* 与上方两列对齐 */
+        grid-auto-rows: auto;
+        gap: 12px;
+        align-items: center;
+      }
+
+      #textInput {
+        grid-column: 1 / -1; /* 跨两列，与上方网格对齐 */
+        width: 100%;
+        min-height: 64px;
+        padding: 10px 16px;
+        font-size: 16px;
+        border-radius: 10px;
+        border: var(--border);
+        outline: none;
+        background: #fff;
+        transition: box-shadow 120ms ease, border-color 120ms ease;
+        resize: vertical;
+      }
+      #textInput::placeholder { color: #94a3b8; }
+      #textInput:focus { border-color: #60a5fa; box-shadow: 0 0 0 4px rgba(37,99,235,0.15); }
+
+      /* 提交按钮放在右列并右对齐 */
+      form#textForm button[type="submit"] { grid-column: 2; justify-self: end; }
+
+      button[type="submit"] {
+        height: 48px; padding: 0 18px; font-size: 16px; border: none; border-radius: 10px;
+        background: linear-gradient(180deg, #3b82f6, #1d4ed8); color: var(--primary-contrast);
+        cursor: pointer; box-shadow: 0 6px 16px rgba(29, 78, 216, 0.25);
+        transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+      }
+      button[type="submit"]:hover { filter: brightness(1.03); box-shadow: 0 10px 22px rgba(29,78,216,0.35); }
+      button[type="submit"]:active { transform: translateY(1px); filter: brightness(0.98); box-shadow: 0 6px 16px rgba(29,78,216,0.25); }
+      button[type="submit"]:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(37,99,235,0.3), 0 6px 16px rgba(29,78,216,0.25); }
+
+      /* --- Responsive --- */
       @media (max-width: 900px) {
-        .video-grid, .text-grid { grid-template-columns: 1fr; }
+        .text-grid { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
+        .panel-submitted { grid-column: 1; grid-row: 1; }
+        .grid-video      { grid-column: 1; grid-row: 2; }
+        .panel-form      { grid-column: 1; grid-row: 3; }
+        form#textForm { grid-template-columns: 1fr; }
+        form#textForm button[type="submit"] { grid-column: 1; justify-self: stretch; }
       }
     </style>
   </head>
@@ -223,12 +182,12 @@
         <div class="text-grid">
           <!-- 左侧：Submitted Prompts（3） -->
           <div class="panel panel-submitted">
-            <label id="textLogLabel">Submitted Prompts</label>
+            <label id="submittedLabel" class="label">Submitted Prompts</label>
             <div id="textLogList" class="log-list" aria-live="polite"></div>
           </div>
 
           <!-- 右侧：Video（7） -->
-          <div class="video-box grid-video">
+          <div class="panel video-box grid-video">
             <div class="video-wrap">
               <video id="videoLeft" muted playsinline preload="none" data-src="../assets/longlive-ironman.mp4"></video>
               <div id="overlayLeft" class="video-overlay hidden">
@@ -240,7 +199,7 @@
           <!-- 下方：Input 表单（占满第二行） -->
           <div class="panel panel-form">
             <form id="textForm" autocomplete="off">
-              <label id="textLogLabel">Input Text</label>
+              <label id="textInputLabel" class="label">Input Text</label>
               <textarea id="textInput" rows="2" placeholder="Type here…"></textarea>
               <button type="submit">Submit</button>
             </form>
@@ -307,41 +266,7 @@
         pendingSimTimers = [];
       }
 
-      // 需要你填写的 11 条文本（按顺序依次打字并提交）
-      // 直接编辑下方数组的每一项文本即可；数量也可增减
-      // const simTexts = [
-      //   'Then he stops near the lens, standing still, looking at the camera.',
-      //   'Now a hail of bullets tears in toward him, leaving glowing trails and spraying sparks.',
-      //   'He raises his arm as rounds and shells streak past to smash distant buildings, triggering blasts and dust.',
-      //   'Emerald-green energy beams rake the boulevard, gouging asphalt and façades and throwing shrapnel.',
-      //   'Firing pauses; he lowers his arms, steps back to center.',
-      //   'He aims: right arm extended to camera, palm squared, repulsor vanes opening.',
-      //   'He fires tight, pulsed red repulsor blasts from his palm toward camera.',
-      //   'He lowers the arm and holds position on the ruined street.',
-      //   'The chest arc reactor unleashes a colossal blue beam straight down the boulevard.',
-      //   'A dark alien craft enters from upper-left and cruises across as he stands motionless.',
-      //   'He looks up, trying to find the alien craft.'
-      // ];
-
-      // 每次提交之间的“间隔（毫秒）”列表：
-      // 第一个值：手动提交 -> 第一次模拟 的延时；第二个值：第1次模拟 -> 第2次模拟；以此类推。
-      // 建议与 simTexts 数量一致；缺失项将使用默认值（首次 3000ms，其后 5000ms）。
-      // const simDelays = [
-      //   6000,
-      //   2100,
-      //   5000,
-      //   6500,
-      //   6700,
-      //   4500,
-      //   3000,
-      //   4000,
-      //   4500,
-      //   7000,
-      //   7000
-      // ];
-
-      // 需要你填写的 11 条文本（按顺序依次打字并提交）
-      // 直接编辑下方数组的每一项文本即可；数量也可增减
+      // 需要你填写的文本（按顺序依次打字并提交）
       const simTexts = [
         'He stops and stands still.',
         'A hail of bullets tears in.',
@@ -353,18 +278,9 @@
         'He looks up, trying to find the alien craft.'
       ];
 
-      // 每次提交之间的“间隔（毫秒）”列表：
-      // 第一个值：手动提交 -> 第一次模拟 的延时；第二个值：第1次模拟 -> 第2次模拟；以此类推。
-      // 建议与 simTexts 数量一致；缺失项将使用默认值（首次 3000ms，其后 5000ms）。
+      // 每次提交之间的间隔（毫秒）列表
       const simDelays = [
-        6000,
-        3000,
-        5500,
-        4000,
-        10500,
-        11500,
-        9500,
-        8500
+        6000, 3000, 5500, 4000, 10500, 11500, 9500, 8500
       ];
 
       function simulateTypingAndSubmit(text, perCharMs = 40) {
@@ -404,28 +320,24 @@
         input.focus();
         if (!firstSubmitDone) { firstSubmitDone = true; runStagedPlaybackSingle(); }
 
-        // 仅对第一次“用户手动提交”安排一系列模拟提交：首个 3s 后，其余每次间隔 5s
+        // 仅对第一次“用户手动提交”安排一系列模拟提交
         if (!isSimulatedSubmit && !simSeriesScheduled) {
           simSeriesScheduled = true;
           clearSimTimers();
           const total = simTexts.length;
-          const defaultFirstDelay = 6000; // 若 simDelays[0] 未提供时的默认值
-          const defaultInterval = 5000;   // 若 simDelays[i>0] 未提供时的默认值
+          const defaultFirstDelay = 6000;
+          const defaultInterval = 5000;
           let elapsed = 0;
           for (let i = 0; i < total; i++) {
             const text = simTexts[i];
             const d = Number(simDelays[i]);
             const delta = Number.isFinite(d) ? d : (i === 0 ? defaultFirstDelay : defaultInterval);
             elapsed += delta;
-            const timerId = setTimeout(() => {
-              simulateTypingAndSubmit(text);
-            }, elapsed);
+            const timerId = setTimeout(() => { simulateTypingAndSubmit(text); }, elapsed);
             pendingSimTimers.push(timerId);
           }
         }
       });
     </script>
   </body>
-  </html>
-
-
+</html>

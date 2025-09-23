@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="assets/deal"
+ROOT_DIR="assets/demo"
 
 # 只找原始视频，排除已经压过的 *_web.*
 find "$ROOT_DIR" -type f \

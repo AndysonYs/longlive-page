@@ -156,7 +156,8 @@ display: flex;
 align-items: center;
 justify-content: center;
 text-align: center;
-font-size: 8pt;
+font-size: 7pt;
+white-space: pre-line;
 }
 
 .gallery-item:hover .prompt-overlay {
@@ -413,7 +414,7 @@ pre {
     padding-bottom: calc(100% / (var(--aspect-ratio)));
 }
 .demo-hero { 
-    --aspect-ratio: 25 / 9; /* 调整 Demo 视频窗口比例：常用 16/9、21/9、4/3 等 */
+    --aspect-ratio: 18 / 9; /* 调整 Demo 视频窗口比例：常用 16/9、21/9、4/3 等 */
 }
 .gallery-video {
     position: absolute;
