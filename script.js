@@ -145,37 +145,7 @@ if (modalImg) {
 
 
 
-
-// Highlight the active part of the sidebar
-const navLinks = document.querySelectorAll('.nav-link');
-const sections = document.querySelectorAll('.gallery-section, .paper-info, .paper-citation, .contact-us');
-
-window.addEventListener('scroll', () => {
-    let current = '';
-
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-
-        if (pageYOffset >= sectionTop - sectionHeight / 3) {
-            current = section.getAttribute('id');
-        }
-    });
-
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href').includes(current)) {
-            link.classList.add('active');
-        }
-    });
-
-    // Remove all active states if the page is scrolled to the top
-    if (window.pageYOffset === 0) {
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-        });
-    }
-});
+// Sidebar nav no longer uses sticky active highlight; color changes only on hover
 
 // Update thumbnail highlight on scroll
 window.addEventListener('scroll', () => {
@@ -296,6 +266,12 @@ document.querySelectorAll('.speed-controls').forEach(group => {
         badge.className = 'duration-badge';
         badge.textContent = '';
 
+        // small category label under video
+        const label = document.createElement('div');
+        label.className = 'interactive-label';
+        const labelText = (window.INTERACTIVE_LABELS && (file in window.INTERACTIVE_LABELS)) ? window.INTERACTIVE_LABELS[file] : '';
+        label.textContent = labelText || '';
+
         const bar = document.createElement('div');
         bar.className = 'progress-bar';
         const fill = document.createElement('div');
@@ -305,6 +281,7 @@ document.querySelectorAll('.speed-controls').forEach(group => {
         item.appendChild(video);
         item.appendChild(promptDiv);
         item.appendChild(badge);
+        item.appendChild(label);
         item.appendChild(bar);
         item.dataset.progressAdded = '1';
 

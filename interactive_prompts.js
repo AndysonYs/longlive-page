@@ -151,7 +151,7 @@ window.INTERACTIVE_PROMPTS = {
 30s-40s: Wide gentle tilt: a small red ball bounces lightly among the falling objects, playing off the open umbrella and grounded bear.
 40s-50s: Wide gentle tilt: a floating book flips open; vivid illustrations glow against the sky while objects keep raining down around the bear.
 50s-60s: Wide gentle tilt: the umbrella slowly rotates, casting fleeting shadows; the red ball rolls near the bear’s paw; a bicycle wheel spins lazily through the air.`,
-    "interactive-TVshow.mp4": `0s-10s: Neon-lit nighttime political mixer, TV-promo style: formal attire, handshakes and smiles amid a bustling crowd with wine glasses. Modern urban venue, soft ambient + bright neon. Coverage mixes close-ups and wides with fast cuts and subtle zooms.
+    "interactive-TVshow.mp4": `0s-10s: Neon-lit nighttime political mixer, TV-promo style: formal attire, handshakes and smiles amid a bustling crowd with wine glasses. Modern urban venue, soft ambient  +  bright neon. Coverage mixes close-ups and wides with fast cuts and subtle zooms.
 10s-20s: Same setup: they raise glasses for a toast—unified, celebratory expressions. Same coverage.
 20s-30s: Same setup: glasses lower after the toast; relieved, satisfied smiles. Same coverage.
 30s-40s: Same setup: firmer handshakes and agreeable nods as they reconnect. Same coverage.
@@ -178,3 +178,32 @@ window.INTERACTIVE_PROMPTS = {
 };
 
 
+
+// Optional: Map each filename to a short category label shown on each card (you can fill these)
+// Example: "interactive-iron.mp4": "动作"
+window.INTERACTIVE_LABELS = {
+    "interactive-iron.mp4": "Action Transition + Environment Transition + Object Introduction",
+    "interactive-trick.mp4": "Action Transition + Environment Transition + Character Introduction",
+    "interactive-paul.mp4": "Action Transition + Environment Transition + Character Introduction",
+    "interactive-casino.mp4": "Action Transition + Character Introduction",
+    "interactive-bear.mp4": "Main-Subject Switch",
+    "interactive-birthday.mp4": "Action Transition",
+    "interactive-boy.mp4": "Action Transition",
+    "interactive-model.mp4": "Action Transition + Environment Transition + Object Introduction",
+    "interactive-action.mp4": "Large Scene Transition",
+    "interactive-science.mp4": "Large Scene Transition",
+    "interactive-autumn.mp4": "Environment Transition",
+    "interactive-grassland.mp4": "Environment Transition + Style Change",
+    "interactive-bamboo.mp4": "Environment Transition",
+    "interactive-magic.mp4": "Action Transition + Character Introduction + Object Introduction",
+    "interactive-dog.mp4": "Action Transition + Character Introduction",
+    "interactive-mountain.mp4": "Large Scene Transition + Object Introduction",
+    "interactive-couple.mp4": "Action Transition",
+    "interactive-crown.mp4": "Logo Animation",
+    "interactive-drown.mp4": "Action Transition + Object Introduction",
+    "interactive-teddy.mp4": "Main-Subject Switch + Object Introduction",
+    "interactive-TVshow.mp4": "Action Transition + Character Introduction",
+    "interactive-hacker.mp4": "Action Transition",
+    "interactive-workshop.mp4": "Action Transition",
+    "interactive-dance.mp4": "Action Transition",
+};
